@@ -1,33 +1,92 @@
-﻿//Створіть клас ArrayManipulator, який має методи для роботи з масивами цілих чисел:
-//Метод GenerateRandomArray(int length, int min, int max), який створює та повертає новий масив заданої довжини з випадковими числами в діапазоні від min до max.
-//Метод FindMax(int[] array), який знаходить та повертає найбільший елемент у масиві.
-//Метод SortArray(int[] array), який сортує масив у зростаючому порядку.
-//Після створення класу запустіть програму, яка створює масив, знаходить найбільший елемент та сортує масив. Виведіть початковий масив, знайдений максимум та відсортований масив на консоль.
-using System;
+﻿//Ваша програма повинна містити наступні елементи:
+//Створення інтерфейсу IOrder, який містить методи для додавання товарів, видалення товарів та отримання загальної вартості замовлення.
+//Створення класу Order, який реалізує інтерфейс IOrder та містить методи для роботи з замовленнями.
+//Побудова ієрархії класів для товарів: базовий клас Product, який містить загальні властивості, та похідні класи, наприклад, FoodProduct, ElectronicProduct тощо.
+//Використання конструкторів для ініціалізації об'єктів класів та деструкторів для звільнення ресурсів.
+//Визначення події для сповіщення про зміну статусу замовлення та організація взаємодії об'єктів через цю подію.
+//Реалізація узагальненого класу для зберігання списку товарів у замовленні.
+//Створення класів винятків для обробки помилок під час роботи з замовленнями.
 
-class ArrayManipulator
+using System;
+public interface IOrder
 {
-    int[] array;
-    public int FindMax(int[] array)
+    public void AddGoods(object item);
+    public void RemoveGoods(object item);
+    public double TotalPrice();
+}
+class Order : IOrder
+{
+    public List<Product> orders = new List<Product>();
+    public void AddGoods(Product product)
     {
-        int max = 0;
-        for (int i =0; i<array.Length; i++)
-        {
-            if (array[i]>max) {
-                max=array[i];
-            }
-        }
-        return max;
+        orders.Add(product);
     }
-    
-  
+    public void RemoveGoods(Product product)
+    {
+        orders.Remove(product);
+    }
+    public double TotalPrice()
+    {
+        double sum = 0;
+        foreach(var good in orders)
+        {
+            sum+= good.Price;
+        }
+        return sum;
+    }
+}
+class Product
+{
+    public string Title { get; set; }
+    public double Price { get; set; }
+    public Product(string title = "", double price = 0.0)
+    {
+        Title=title;
+        Price=price;
+    }
+    public override string ToString()
+    {
+        return $"Title: {Title}\nPrice: {Price}";
+    }
+}
+class FoodProduct : Product
+{
+    public string Type { get; set; }
+    public FoodProduct(string title, double price, string type=""):base(title, price)
+    {
+        Type=type;
+    }
+    public override string ToString()
+    {
+        return "Food Product\n" + base.ToString() + $"\nType: {Type}";
+    }
+}
+class ElectronicProduct: Product
+{
+    public string Type { get; set; }
+    public ElectronicProduct(string title, double price, string type=""):base(title, price)
+    {
+        Type=type;
+    }
+    public override string ToString()
+    {
+        return "Electronic Product\n" + base.ToString() + $"\nType: {Type}";
+    }
+
+}
+class GenericClass<T>
+{
+   public List<T> goods = new List<T>;
 }
 
 class Program
 {
     static void Main(string[] args)
     {
-        ArrayManipulator array = new ArrayManipulator();
+        FoodProduct prod1 = new FoodProduct("aaaa", 120.6, "ababa");
+        ElectronicProduct prod2 = new ElectronicProduct("bbbb", 300.0, "apapa");
 
+        
     }
 }
+
